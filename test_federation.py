@@ -1,4 +1,4 @@
-import os, json
+import os, json, re
 
 from lxml.html import fromstring
 import nose.tools as n
@@ -17,19 +17,10 @@ html = fromstring('''
       </div>
 ''')
 
-def test_parse_targets_snippet():
-    observed = federation.parse_one(html)
-    expected = ['explore.data.gov']
-    n.assert_list_equal(observed, expected)
-
 def check_parse_targets(filename):
     html = fromstring(open(filename).read())
     expected = json.load(open(filename.replace('.html', '.json')))
     n.assert_list_equal(federation.parse_targets(html), expected)
-
-def test_parse_targets():
-    for basename in os.listdir('fixtures'):
-        yield check_parse_targets, os.path.join('fixtures', basename)
 
 def check_parse_source(filename):
     html = fromstring(open(filename).read())
@@ -40,6 +31,15 @@ def check_parse_source(filename):
     n.assert_equal(type(observed), type(expected))
     n.assert_equal(observed, expected)
 
+def test_parse_targets_snippet():
+    observed = federation.parse_targets(html)
+    expected = ['explore.data.gov']
+    n.assert_list_equal(observed, expected)
+
 def test_parse_targets():
     for basename in os.listdir('fixtures'):
         yield check_parse_targets, os.path.join('fixtures', basename)
+
+def test_parse_source():
+    for basename in os.listdir('fixtures'):
+        yield check_parse_source, os.path.join('fixtures', basename)
