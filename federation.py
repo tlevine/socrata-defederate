@@ -16,13 +16,8 @@ def parse_source(html):
     url = html.xpath('//meta[@property="og:url"]/@content')[0]
     return re.match(r'https://([^/]+)/browse/embed', url).group(1)
 
-def iterhtml():
-    'Returns an iterator of lxml html elements'
-    for homepage in os.listdir('homepages'):
-        yield parse(os.path.join('homepages',homepage)).getroot()
-
 def build_json():
-    htmls = list(iterhtml())
+    htmls = [parse(os.path.join('homepages',homepage)).getroot() for homepage in os.listdir('homepages')]
     return json.dumps({
         'edges': reduce(lambda a,b: a + parse_page(b), htmls, []),
         'nodes': map(parse_source, htmls),
