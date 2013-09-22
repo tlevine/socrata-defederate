@@ -26,7 +26,7 @@ def build_json():
 def build_d3_json():
     htmls = [parse(os.path.join('homepages',homepage)).getroot() for homepage in os.listdir('homepages')]
 
-    nodes_set = set()
+    nodes_set = set(map(parse_source, htmls))
     links_list = reduce(lambda a,b: a + parse_page(b), htmls, [])
     for link in links_list:
         nodes_set = nodes_set.union(link)
@@ -40,4 +40,4 @@ def build_d3_json():
     })
 
 if __name__ == '__main__':
-    print build_json()
+    print build_d3_json()
