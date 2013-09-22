@@ -1,4 +1,7 @@
+import os, json
+
 from lxml.html import fromstring
+import nose.tools as n
 
 import federation
 
