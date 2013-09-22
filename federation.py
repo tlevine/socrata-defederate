@@ -1,4 +1,6 @@
-import re
+#!/usr/bin/env python
+import os, re
+from lxml.html import parse
 
 def parse_page(html):
     source = parse_source(html)
@@ -12,3 +14,13 @@ def parse_targets(html):
 def parse_source(html):
     url = html.xpath('//meta[@property="og:url"]/@content')[0]
     return re.match(r'https://([^/]+)/browse/embed', url).group(1)
+
+def iterhtml():
+    'Returns an iterator of lxml html elements'
+    for homepage in os.listdir('homepages'):
+        yield parse(os.path.join('homepages',homepage)).getroot()
+
+if __name__ == '__main__':
+    import json
+    # Print out an adjacency list.
+    print json.dumps(reduce(lambda a,b: a + parse_page(b), iterhtml(), []))
