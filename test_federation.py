@@ -26,7 +26,8 @@ def check_parse_source(filename):
     html = fromstring(open(filename).read())
     observed = federation.parse_source(html)
 
-    expected = re.match(r'/([^/]+)\.html', filename).group(1)
+    print filename
+    expected = re.match(r'.*/([^/]+)\.html', filename).group(1)
 
     n.assert_equal(type(observed), type(expected))
     n.assert_equal(observed, expected)
@@ -38,8 +39,10 @@ def test_parse_targets_snippet():
 
 def test_parse_targets():
     for basename in os.listdir('fixtures'):
-        yield check_parse_targets, os.path.join('fixtures', basename)
+        if basename.endswith('.html'):
+            yield check_parse_targets, os.path.join('fixtures', basename)
 
 def test_parse_source():
     for basename in os.listdir('fixtures'):
-        yield check_parse_source, os.path.join('fixtures', basename)
+        if basename.endswith('.html'):
+            yield check_parse_source, os.path.join('fixtures', basename)
