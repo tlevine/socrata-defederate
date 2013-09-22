@@ -56,6 +56,7 @@ def test_parse_page():
     observed = federation.parse_page(html)
     n.assert_list_equal(observed, expected)
 
+@n.nottest
 def test_build_json():
     observed = json.loads(federation.build_json())
     expected_keys = {'edges', 'nodes'}
@@ -72,7 +73,7 @@ def test_build_json():
         n.assert_equal(type(node), unicode)
 
 def test_build_d3_json():
-    observed = json.loads(federation.build_json())
+    observed = json.loads(federation.build_d3_json())
     expected_keys = {'links', 'nodes'}
     n.assert_equal(set(observed.keys()), expected_keys)
     for k in expected_keys:

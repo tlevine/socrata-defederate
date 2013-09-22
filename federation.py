@@ -23,5 +23,12 @@ def build_json():
         'nodes': map(parse_source, htmls),
     })
 
+def build_d3_json():
+    htmls = [parse(os.path.join('homepages',homepage)).getroot() for homepage in os.listdir('homepages')]
+    return json.dumps({
+        'edges': reduce(lambda a,b: a + parse_page(b), htmls, []),
+        'nodes': map(parse_source, htmls),
+    })
+
 if __name__ == '__main__':
     print build_json()
