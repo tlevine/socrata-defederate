@@ -28,11 +28,16 @@
 
     var node = svg.selectAll(".node")
         .data(graph.nodes)
-      .enter().append("circle")
-        .attr("class", "node")
-        .attr("r", 5)
-        .style("fill", function(d) { return color(1 /* d.group */); })
-        .call(force.drag);
+      .enter()
+        .append('svg:a')
+          .attr('xlink:href', function(d) { return 'https://' + d.name })
+          .attr('target', '_blank')
+          .append("circle")
+          .attr("class", "node")
+          .attr("title", function(d) { return d.name; })
+          .attr("r", 30)
+          .style("fill", function(d) { return color(2); })
+          .call(force.drag)
 
     node.append("title")
         .text(function(d) { return d.name; });
