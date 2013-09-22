@@ -46,10 +46,12 @@ def test_parse_source():
         if basename.endswith('.html'):
             yield check_parse_source, os.path.join('fixtures', basename)
 
-'''
 def test_parse_page():
     html = fromstring(open(os.path.join('fixtures', 'explore.data.gov.html')).read())
-    icondata.cityofboston.gov
-    icondata.medicare.gov
-    iconinfo.samhsa.gov
-'''
+    expected = [
+        ('explore.data.gov', 'data.cityofboston.gov'),
+        ('explore.data.gov', 'data.medicare.gov'),
+        ('explore.data.gov', 'info.samhsa.gov'),
+    ]
+    observed = federation.parse_page(html)
+    n.assert_list_equal(observed, expected)
