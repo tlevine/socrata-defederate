@@ -70,3 +70,19 @@ def test_build_json():
 
     for node in observed['nodes']:
         n.assert_equal(type(node), unicode)
+
+def test_build_d3_json():
+    observed = json.loads(federation.build_json())
+    expected_keys = {'links', 'nodes'}
+    n.assert_equal(set(observed.keys()), expected_keys)
+    for k in expected_keys:
+        n.assert_equal(type(observed[k]), list)
+
+    for link in observed['links']:
+        n.assert_equal(type(link), dict)
+        n.assert_equal(set(link.keys()), {'source', 'target'})
+        for node in link.values():
+            n.assert_equal(type(node), int)
+
+    for node in observed['nodes']:
+        n.assert_equal(node.keys(), ['name'])
