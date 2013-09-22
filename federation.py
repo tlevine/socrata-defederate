@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os, re
+import json
 from lxml.html import parse
 
 def parse_page(html):
@@ -20,7 +21,12 @@ def iterhtml():
     for homepage in os.listdir('homepages'):
         yield parse(os.path.join('homepages',homepage)).getroot()
 
+def build_json():
+    htmls = list(iterhtml())
+    return json.dumps({
+        'edges': reduce(lambda a,b: a + parse_page(b), htmls, []),
+        'nodes': map(parse_source, htmls),
+    })
+
 if __name__ == '__main__':
-    import json
-    # Print out an adjacency list.
-    print json.dumps(reduce(lambda a,b: a + parse_page(b), iterhtml(), []))
+    print build_json()
