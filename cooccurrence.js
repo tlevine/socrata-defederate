@@ -40,8 +40,7 @@
     // Precompute the orders.
     var orders = {
       name: d3.range(n).sort(function(a, b) { return d3.ascending(nodes[a].name, nodes[b].name); }),
-      count: d3.range(n).sort(function(a, b) { return nodes[b].count - nodes[a].count; }),
-      group: d3.range(n).sort(function(a, b) { return nodes[b].group - nodes[a].group; })
+      count: d3.range(n).sort(function(a, b) { return nodes[b].count - nodes[a].count; })
     };
 
     // The default sort order.
@@ -94,7 +93,6 @@
           .attr("width", x.rangeBand())
           .attr("height", x.rangeBand())
           .style("fill-opacity", function(d) { return z(d.z); })
-          .style("fill", function(d) { return nodes[d.x].group == nodes[d.y].group ? c(nodes[d.x].group) : null; })
           .on("mouseover", mouseover)
           .on("mouseout", mouseout);
     }
