@@ -1,7 +1,9 @@
 import re
 
-def parse_page():
-    return []
+def parse_page(html):
+    source = parse_source(html)
+    targets = parse_targets(html)
+    return [(source,target) for target in targets]
 
 def parse_targets(html):
     srcs = html.xpath('//h4[text()="Federated Domains"]/following-sibling::ul[position()=1]/li/a/img/@src')
