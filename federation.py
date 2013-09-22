@@ -1,4 +1,5 @@
 
 
-def parse_one(html):
+def parse_targets(html):
+    return []
 
