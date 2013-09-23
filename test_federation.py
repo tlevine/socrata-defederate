@@ -8,7 +8,8 @@ import federation
 def check_parse_targets(filename):
     html = fromstring(open(filename).read())
     expected = json.load(open(filename.replace('.html', '.json')))
-    n.assert_list_equal(federation.parse_targets(html), expected)
+    observed = federation.parse_targets(html)
+    n.assert_list_equal(observed, expected)
 
 def check_parse_source(filename):
     html = fromstring(open(filename).read())
