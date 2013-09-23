@@ -3,15 +3,12 @@ import json, os
 
 from federation import build_network
 
-def portal(dcat):
-
-
 def dedupe(dcats, edges):
     '''
     Args:
-        A list of Socrata dcat lists, each list augmented with a "portal" key
+        An iterable of Socrata dcat lists, each list augmented with a "portal" key
     Returns:
-        One list of dcat, still augmented with the "portal" key, sorted by identifier
+        An iterable of dcat, still augmented with the "portal" key, sorted by identifier
 
     This deduplicates and combines of dcat based on the edges of the federation graph.
     '''
@@ -38,8 +35,8 @@ def load(catalogs = os.path.join('socrata-catalog', 'catalogs')):
 
 def main():
     edges = build_network()['edges']
-    dedupe_ab = lambda a,b: dedupe(a, b, edges)
-    json.dumps(reduce(dedupe_ab, load()))
+    dcat = dedupe(load(), edges)
+    print json.dumps(list(dcat))
 
 if __name__ == '__main__':
     main()
