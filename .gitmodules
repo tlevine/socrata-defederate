@@ -1,0 +1,3 @@
+[submodule "socrata-catalog"]
+	path = socrata-catalog
+	url = git@github.com:tlevine/socrata-catalog.git
