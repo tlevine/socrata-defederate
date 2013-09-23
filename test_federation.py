@@ -56,16 +56,15 @@ def test_parse_page():
     observed = federation.parse_page(html)
     n.assert_list_equal(observed, expected)
 
-@n.nottest
-def test_build_json():
-    observed = json.loads(federation.build_json())
+def test_build_network():
+    observed = federation.build_network()
     expected_keys = {'edges', 'nodes'}
     n.assert_equal(set(observed.keys()), expected_keys)
     for k in expected_keys:
         n.assert_equal(type(observed[k]), list)
 
     for edge in observed['edges']:
-        n.assert_equal(type(edge), list)
+        n.assert_equal(type(edge), tuple)
         for node in edge:
             n.assert_equal(type(node), unicode)
 

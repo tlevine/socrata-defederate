@@ -16,12 +16,12 @@ def parse_source(html):
     url = html.xpath('//meta[@property="og:url"]/@content')[0]
     return re.match(r'https://([^/]+)/browse/embed', url).group(1)
 
-def build_json():
+def build_network():
     htmls = [parse(os.path.join('homepages',homepage)).getroot() for homepage in os.listdir('homepages')]
-    return json.dumps({
+    return {
         'edges': reduce(lambda a,b: a + parse_page(b), htmls, []),
         'nodes': map(parse_source, htmls),
-    })
+    }
 
 def build_d3_json():
     htmls = [parse(os.path.join('homepages',homepage)).getroot() for homepage in os.listdir('homepages')]
