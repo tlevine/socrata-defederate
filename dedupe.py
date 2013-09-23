@@ -1,57 +1,45 @@
 #!/usr/bin/env python
-from collections import OrderedDict
+import json, os
 
 from federation import build_network
 
-def dedupe(a, b, edges):
+def portal(dcat):
+
+
+def dedupe(dcats, edges):
     '''
     Args:
-        Two tuples of (portal, dcat list)
+        A list of Socrata dcat lists, each list augmented with a "portal" key
     Returns:
-        One list of dcat, sorted by identifier
+        One list of dcat, still augmented with the "portal" key, sorted by identifier
 
     This deduplicates and combines of dcat based on the edges of the federation graph.
     '''
-    a_portal, a_list = a
-    b_portal, b_list = b
 
-    a_dict = OrderedDict(zip([item['identifier'] for item in a_list], a_list))
-    b_dict = OrderedDict(zip([item['identifier'] for item in b_list], b_list))
+    losing_portals = set([edge[0] for edge in edges])
 
-    winner = winning_portal(a_portal, b_portal, edges)
+    seen = set()
+    for dcat in dcats:
+        for dataset in dcat:
+            if not (dataset['identifier'] in seen and dataset['portal'] in losing_portals):
+                yield dataset
+            seen.add(dataset['identifier'])
 
-    if winner == a_portal:
-        b_dict.update(a_dict)
-        return b_dict.values()
-    else:
-        a_dict.update(b_dict)
-        return a_dict.values()
-
-def winning_portal(a, b, edges):
-    '''
-    Args:
-        a: A portal name
-        b: Another portal name
-        c: The edges of the federation graph
-    Returns:
-        a if b federates a,
-        b if a federates b,
-        otherwise None
-    '''
-    for edge in edges:
-        if edge == (a, b):
-            return b
-        elif edge == (b, a):
-            return a
-
-def load():
+def load(catalogs = os.path.join('socrata-catalog', 'catalogs')):
     '''
     Returns an iterable of dcat lists
     '''
-    for data_json in os.listdir(os.path.join('socrata-catalog', 'catalogs')):
+    for data_json in os.listdir(catalogs):
         portal = data_json.replace('.json', '')
-        yield data_json, json.load(open(os.path.join('socrata-catalogs', 'catalogs', data_json)))[1:]
+        dcat = json.load(open(os.path.join(catalogs, data_json)))[1:]
+        for dataset in dcat:
+            dataset['portal'] = portal
+        yield dcat
 
 def main():
     edges = build_network()['edges']
-    print load().next()
+    dedupe_ab = lambda a,b: dedupe(a, b, edges)
+    json.dumps(reduce(dedupe_ab, load()))
+
+if __name__ == '__main__':
+    main()
