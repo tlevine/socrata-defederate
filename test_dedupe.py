@@ -22,4 +22,5 @@ def test_dedupe():
         {'identifier': 'g', 'portal': 'portal2'},
         {'identifier': 'h', 'portal': 'portal2'},
     ]
-    n.assert_list_equal(list(observed), expected)
+    observed_list = list(sorted(observed, key = lambda x: x['identifier']))
+    n.assert_list_equal(observed_list, expected)
