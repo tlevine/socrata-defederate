@@ -15,11 +15,11 @@ def check_parse_source(filename):
     html = fromstring(open(filename).read())
     observed = federation.parse_source(html)
 
-    print filename
-    expected = re.match(r'.*/([^/]+)\.html', filename).group(1)
+    expected = unicode(re.match(r'.*/([^/]+)\.html', filename).group(1))
 
     n.assert_equal(type(observed), type(expected))
     n.assert_equal(observed, expected)
+    n.assert_equal(type(observed), unicode)
 
 def test_parse_targets_snippet():
     html = fromstring('''

@@ -14,7 +14,7 @@ def parse_targets(html):
 
 def parse_source(html):
     url = html.xpath('//meta[@property="og:url"]/@content')[0]
-    return re.match(r'https://([^/]+)/browse/embed', url).group(1)
+    return unicode(re.match(r'https://([^/]+)/browse/embed', url).group(1))
 
 def build_network():
     htmls = [parse(os.path.join('homepages',homepage)).getroot() for homepage in os.listdir('homepages')]
