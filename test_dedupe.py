@@ -12,7 +12,7 @@ def test_dedupe():
         {'identifier': 'h', 'portal': 'portal2'},
         {'identifier': 'c', 'portal': 'portal2'}]
     edges = [('portal1', 'portal2')]
-    observed = dedupe.dedupe([dcat1, dcat2], edges)
+    observed = dedupe.dedupe(dcat1 + dcat2, edges)
 
     # Sort by identifier
     expected = [
