@@ -28,7 +28,11 @@ def dedupe(a, b, edges):
         return a_dict.values()
 
 def winning_portal(a, b, edges):
-    return a
+    for edge in edges:
+        if edge == (a, b):
+            return b
+        elif edge == (b, a):
+            return a
 
 def load():
     '''
