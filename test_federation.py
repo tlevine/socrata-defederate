@@ -10,6 +10,8 @@ def check_parse_targets(filename):
     expected = json.load(open(filename.replace('.html', '.json')))
     observed = federation.parse_targets(html)
     n.assert_list_equal(observed, expected)
+    for item in observed:
+        n.assert_equal(type(item), unicode)
 
 def check_parse_source(filename):
     html = fromstring(open(filename).read())
