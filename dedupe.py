@@ -28,6 +28,16 @@ def dedupe(a, b, edges):
         return a_dict.values()
 
 def winning_portal(a, b, edges):
+    '''
+    Args:
+        a: A portal name
+        b: Another portal name
+        c: The edges of the federation graph
+    Returns:
+        a if b federates a,
+        b if a federates b,
+        otherwise None
+    '''
     for edge in edges:
         if edge == (a, b):
             return b
