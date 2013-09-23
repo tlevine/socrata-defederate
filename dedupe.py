@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import json, os
+import json, os, csv
 from collections import Counter
 
 from federation import build_network
@@ -19,7 +19,6 @@ def dedupe(dcat, edges):
     '''
 
     losing_portals = set([edge[0] for edge in edges])
-    print dcat
     duplicates = set((k for k,v in identifiers(dcat).iteritems() if v > 1))
 
     for dataset in dcat:
@@ -37,11 +36,36 @@ def load(catalogs = os.path.join('socrata-catalog', 'catalogs')):
             dataset['portal'] = portal
             yield dataset
 
-def main():
+def main_json():
     edges = build_network()['edges']
     dcat_in = list(load())
     dcat_out = list(dedupe(dcat_in, edges))
-    print json.dumps(dcat_out)
+    json.dump(dcat_out, open('data-deduplicated.json', 'w'))
+
+def main_csv():
+    edges = build_network()['edges']
+
+    fp = open('socrata.csv')
+    quasi_dcat_in = list(csv.DictReader(fp))
+    fp.close()
+
+    for dataset in quasi_dcat_in:
+        dataset['identifier'] = dataset['id']
+
+    quasi_dcat_out = list(dedupe(quasi_dcat_in, edges))
+
+    for dataset in quasi_dcat_out:
+        del dataset['identifier']
+
+    fp = open('socrata-deduplicated.csv', 'w')
+    w = csv.DictWriter(fp, sorted(quasi_dcat_out[0].keys()))
+    w.writeheader()
+    w.writerows(quasi_dcat_out)
+    fp.close()
 
 if __name__ == '__main__':
-    main()
+    import sys
+    if sys.argv[1] == 'json':
+        main_json()
+    elif sys.argv[1] == 'csv':
+        main_csv()

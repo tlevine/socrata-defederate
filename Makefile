@@ -6,4 +6,7 @@ json: download
 		./federation.py > federation.json
 
 dcat: download
-		./dedupe.py > data-deduplicated.json
+		./dedupe.py json
+
+csv: download
+		./dedupe.py csv
