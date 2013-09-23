@@ -18,3 +18,11 @@ p2 <- ggplot(datasets) + aes(x = createdAt, y = portal) + geom_point(alpha = 0.1
   scale_y_discrete('Data portal') +
   theme(panel.background = element_rect(fill='white')) +
   ggtitle('Dataset creation on Socrata data portals, over time\n(Each point is a dataset.)')
+
+png('histogram.png', width = 840, height = 840 * 3/4)
+print(p1)
+dev.off()
+
+png('dates.png', width = 840, height = 840 * 3/4)
+print(p2)
+dev.off()
