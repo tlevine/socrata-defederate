@@ -41,8 +41,8 @@ def load(catalogs = os.path.join('socrata-catalog', 'catalogs')):
 
 def main():
     edges = build_network()['edges']
-    dcat = dedupe(load(), edges)
-    print json.dumps(list(dcat))
+    dcat = list(dedupe(load(), edges))
+    print json.dumps(dcat)
 
 if __name__ == '__main__':
     main()
